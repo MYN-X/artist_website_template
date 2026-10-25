@@ -1,0 +1,13 @@
+file.json
+instance/
+gen_hash.py
+.env
+backups/
+services/
+portfolio/
+portfolio.db
+portfolio.db-journal
+__pycache__/
+*.pyc
+images/
+venv/

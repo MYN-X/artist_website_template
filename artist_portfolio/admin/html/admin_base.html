@@ -1,0 +1,41 @@
+{# admin_base.html #}
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        {% endblock %} 
+    </title>
+
+    {% block global_css %}
+        <link rel="stylesheet" href="{{ url_for('home.static', filename='styles.css') }}">
+    {% endblock %}
+
+    {% block page_css %}
+    {% endblock %}
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">Artist Admin</div>
+        {% block nav %}
+        {% endblock %}
+    </nav>
+    
+
+    <main class="admin-container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% include 'admin_components/notification.html' %}    
+
+    {% block page_js %}
+    {% endblock %}
+
+</body>
+
+

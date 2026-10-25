@@ -1,0 +1,88 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+    Manage Blogs — Admin Dashboard
+{% endblock %} 
+
+{% block page_css %}
+    <link rel="stylesheet" href="{{ url_for('admin.static', filename='manage_blogs.css') }}">
+{% endblock %}
+
+{% block nav %}
+    {% include 'admin_components/page_nav.html' %}
+{% endblock %}
+
+{% block content %}
+    <h1 class="admin-title">Manage Blogs</h1>
+
+    <div class="notification" id="msgBox"></div>
+
+    <div class="blog-list">
+        <h3>Existing Blogs</h3>
+        {% for blog in blogs %}
+        <div class="blog-item">
+            <div>
+                <h3>{{ blog.title }}</h3>
+                <p>{{ blog.excerpt }}</p>
+                <small>{{ blog.date.strftime('%B %d, %Y') }}</small>
+            </div>
+            <div class="blog-actions">
+                <button class="edit-btn" data-id="{{ blog.id }}" data-title="{{ blog.title }}" data-excerpt="{{ blog.excerpt }}" data-content="{{ blog.content }}" onclick="editBlogFromButton(this)">Edit</button>
+                <button class="delete-btn" data-id="{{ blog.id }}" onclick="deleteBlog(this.dataset.id)">Delete</button>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="pagination-container">
+        {% if pagination and pagination.pages > 1 %}
+            <div class="pagination" aria-label="Blog pagination">
+                <!-- Prev -->
+                {% if pagination.has_prev %}
+                <a class="page-btn"
+                    href="{{ url_for('admin_blogs.manage_blogs', page=pagination.prev_num, per_page=per_page) }}"
+                    rel="prev">← Prev</a>
+                {% else %}
+                <span class="page-btn disabled">← Prev</span>
+                {% endif %}
+
+                <!-- Page numbers -->
+                <div class="page-numbers">
+                {% for p in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                    {% if p %}
+                    {% if p == pagination.page %}
+                        <span class="page-number active" aria-current="page">{{ p }}</span>
+                    {% else %}
+                        <a class="page-number"
+                        href="{{ url_for('admin_blogs.manage_blogs', page=p, per_page=per_page) }}">{{ p }}</a>
+                    {% endif %}
+                    {% else %}
+                    <span class="page-ellipsis">…</span>
+                    {% endif %}
+                {% endfor %}
+                </div>
+
+                <!-- Next -->
+                {% if pagination.has_next %}
+                <a class="page-btn"
+                    href="{{ url_for('admin.manage_blogs', page=pagination.next_num, per_page=per_page) }}"
+                    rel="next">Next →</a>
+                {% else %}
+                <span class="page-btn disabled">Next →</span>
+                {% endif %}
+            </div>
+        {% endif %}
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h3 id="formTitle">Create New Blog</h3>
+        <input type="text" id="blogTitle" placeholder="Blog Title" required>
+        <input type="text" id="blogExcerpt" placeholder="Short Excerpt" required>
+        <textarea id="blogContent" placeholder="Full Content" required></textarea>
+        <button class="save-btn" id="saveBtn">Save Blog</button>
+    </div>
+{% endblock %}
+
+{% block page_js %}
+    <script src="{{url_for('admin.static', filename='manage_blogs.js') }}" type="module"></script>
+{% endblock %}

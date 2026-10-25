@@ -1,0 +1,7 @@
+Dockerfile
+client_site_map_summary.html
+client_site_map_summary.pdf
+app_improvement_review.md
+.pytest_cache
+instance
+portfolio.db

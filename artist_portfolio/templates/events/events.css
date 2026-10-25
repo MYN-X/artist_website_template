@@ -1,0 +1,551 @@
+/* =========================
+   EVENTS — ONYX CROWN THEME
+   Black & gold — matches home, about, media, blog archive, post, contact themes.
+========================= */
+
+:root {
+  --gold:        #C9A84C;
+  --gold-bright: #F0C040;
+  --gold-soft:   rgba(201, 168, 76, 0.18);
+  --gold-glow:   rgba(201, 168, 76, 0.28);
+
+  --ink:      #0A0A0A;
+  --surface:  #111111;
+  --surface2: #1A1A1A;
+  --paper:    #141414;
+
+  --text:     #F0EDE6;
+  --muted:    rgba(240, 237, 230, 0.52);
+
+  --line:    rgba(201, 168, 76, 0.14);
+  --shadow:  rgba(0, 0, 0, 0.55);
+  --shadow2: rgba(0, 0, 0, 0.72);
+
+  /* shared system tokens */
+  --radius-xl: 26px;
+  --radius-lg: 22px;
+  --radius-md: 18px;
+  --blur: 14px;
+
+  --shadow-md: 0 18px 70px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 22px 90px rgba(0, 0, 0, 0.50);
+  --shadow-xl: 0 28px 90px rgba(0, 0, 0, 0.55);
+
+  --ease: 0.18s ease;
+}
+
+main {
+  padding-bottom: 3rem;
+}
+
+/* Accessible focus */
+:where(a, button, [role="button"], input, textarea, select):focus-visible {
+  outline: 3px solid rgba(201, 168, 76, 0.50);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+/* =========================
+   HERO
+========================= */
+.events-hero {
+  padding: 5rem 5% 2rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  background:
+    radial-gradient(circle at 50% 30%, rgba(201, 168, 76, 0.12), transparent 52%),
+    linear-gradient(180deg, rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.60));
+
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  margin-top: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* gold crown-glow orb */
+.events-hero::after {
+  content: "";
+  position: absolute;
+  inset: -35%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.10), transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.06), transparent 68%);
+  filter: blur(1px);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.events-hero h1 {
+  color: var(--text);
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 0 32px rgba(201, 168, 76, 0.18);
+}
+
+.events-hero h1::after {
+  content: "";
+  display: block;
+  width: 92px;
+  height: 2px;
+  margin: 1rem auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.9;
+}
+
+.events-intro {
+  max-width: 900px;
+  margin: 0.85rem auto 0;
+  color: var(--muted);
+  line-height: 1.85;
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================
+   SECTION HEADER
+========================= */
+.section-header {
+  max-width: 1200px;
+  margin: 2rem auto 1.25rem;
+  padding: 0 5%;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.section-header::after {
+  content: "";
+  display: block;
+  width: 110px;
+  height: 2px;
+  margin-top: 0.8rem;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.85;
+}
+
+/* =========================
+   GRID + CARDS
+========================= */
+.events-grid {
+  max-width: 1200px;
+  margin: 0 auto 2.5rem;
+  padding: 0 5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1rem;
+}
+
+.event-card {
+  background: var(--surface2);
+  border: 1px solid rgba(201, 168, 76, 0.16);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem;
+
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--ease), box-shadow var(--ease), border-color var(--ease);
+}
+
+/* gold corner sheen — blue aura radial removed */
+.event-card::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(201, 168, 76, 0.09), transparent 55%),
+    radial-gradient(circle at 70% 30%, rgba(201, 168, 76, 0.06), transparent 62%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201, 168, 76, 0.38);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 22px rgba(201, 168, 76, 0.08);
+}
+
+/* Meta */
+.event-date {
+  color: var(--gold);
+  opacity: 0.85;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  margin-bottom: 0.55rem;
+  position: relative;
+  z-index: 1;
+}
+
+.event-time,
+.event-location {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Title + desc */
+.event-title {
+  color: var(--text);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  font-size: 1.05rem;
+  margin: 0.35rem 0 0.55rem;
+  position: relative;
+  z-index: 1;
+}
+
+.event-desc {
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 0.98rem;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Actions */
+.event-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.event-btn {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  padding: 0.85rem 1.05rem;
+  border-radius: 999px;
+  text-decoration: none;
+
+  background: var(--gold);
+  color: #0A0A0A;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+
+  box-shadow: 0 14px 40px rgba(201, 168, 76, 0.28);
+  transition: transform var(--ease), box-shadow var(--ease), background var(--ease);
+}
+
+.event-btn:hover {
+  background: var(--gold-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 22px 60px rgba(201, 168, 76, 0.38);
+}
+
+/* =========================
+   CTA SECTION
+========================= */
+.cta-section {
+  background:
+    radial-gradient(circle at 50% 0%,   rgba(201, 168, 76, 0.14), transparent 56%),
+    radial-gradient(circle at 50% 100%, rgba(201, 168, 76, 0.06), transparent 48%),
+    rgba(17, 17, 17, 0.92) !important;
+  border: 1px solid rgba(201, 168, 76, 0.22) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow:
+    var(--shadow-lg),
+    0 0 40px rgba(201, 168, 76, 0.06) !important;
+  backdrop-filter: blur(var(--blur)) !important;
+  -webkit-backdrop-filter: blur(var(--blur)) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(circle at 25% 25%, rgba(201, 168, 76, 0.09), transparent 56%),
+    radial-gradient(circle at 60% 30%, rgba(201, 168, 76, 0.06), transparent 62%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.cta-section h2 {
+  color: var(--text) !important;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.65rem;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-section p {
+  color: var(--muted) !important;
+  line-height: 1.8;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-button {
+  background: var(--gold) !important;
+  color: #0A0A0A !important;
+  box-shadow: 0 18px 56px rgba(201, 168, 76, 0.30) !important;
+  position: relative;
+  z-index: 1;
+  transition: transform var(--ease), box-shadow var(--ease), background var(--ease);
+}
+
+.cta-button:hover {
+  background: var(--gold-bright) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 28px 80px rgba(201, 168, 76, 0.40) !important;
+}
+
+/* =========================
+   NAV MOBILE
+========================= */
+.h-menu {
+  display: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  nav {
+    padding: 0.75rem 1rem;
+  }
+
+  .logo {
+    font-size: 1.1rem;
+  }
+
+  .h-menu {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+
+    background: rgba(10, 10, 10, 0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-links li {
+    border-bottom: 1px solid rgba(201, 168, 76, 0.10);
+  }
+
+  .nav-links a {
+    padding: 1rem;
+    display: block;
+    text-align: center;
+    color: var(--text);
+  }
+}
+
+/* =========================
+   RESPONSIVE LAYOUT
+========================= */
+
+/* Small phones */
+@media (max-width: 480px) {
+  .events-hero {
+    padding: 3.4rem 1.25rem 1.6rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .events-hero h1 {
+    font-size: 1.9rem;
+    line-height: 1.2;
+  }
+
+  .events-intro {
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .events-grid {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+    padding: 0 1rem;
+  }
+
+  .event-card {
+    border-radius: var(--radius-md);
+    padding: 1rem;
+  }
+
+  .event-actions .event-btn {
+    padding: 0.8rem;
+  }
+
+  footer p {
+    font-size: 0.75rem;
+    text-align: center;
+  }
+}
+
+/* Extra tiny */
+@media (max-width: 360px) {
+  .events-hero {
+    padding-top: 4rem;
+    padding-bottom: 1rem;
+  }
+
+  .events-hero .events-intro {
+    font-size: 0.9rem;
+    padding: 0 0.5rem;
+  }
+
+  .events-grid {
+    padding: 0 0.5rem;
+  }
+
+  .cta-section {
+    margin: 2rem auto !important;
+    padding: 1.5rem 1rem !important;
+  }
+
+  .cta-section h2 {
+    font-size: 1.4rem;
+  }
+
+  .social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  footer {
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+
+  footer p {
+    font-size: 0.8rem;
+  }
+}
+
+/* Tablet */
+@media (min-width: 481px) and (max-width: 768px) {
+  .events-hero {
+    padding: 3rem 1.5rem;
+  }
+
+  .events-hero h1 {
+    font-size: 2.3rem;
+  }
+
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 0 1.5rem;
+  }
+
+  .cta-section {
+    padding: 2.5rem 1.5rem;
+  }
+}
+
+/* Small laptops */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .events-hero {
+    max-width: 900px;
+    margin: 2rem auto 0;
+    padding: 4rem 2rem;
+  }
+
+  .events-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .cta-section {
+    text-align: center;
+  }
+}
+
+/* Large desktops */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .events-hero h1 {
+    font-size: 2.8rem;
+  }
+
+  .events-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .event-card {
+    padding: 1.75rem;
+  }
+}
+
+/* Ultra-wide */
+@media (min-width: 1441px) {
+  .events-main {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .events-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* =========================
+   Backdrop-filter fallback
+========================= */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .event-card,
+  .cta-section {
+    background: rgba(17, 17, 17, 0.97) !important;
+  }
+}
+
+/* =========================
+   Reduced motion
+========================= */
+@media (prefers-reduced-motion: reduce) {
+  .event-card,
+  .event-btn,
+  .cta-button {
+    transition: none;
+  }
+}

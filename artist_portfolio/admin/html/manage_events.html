@@ -1,0 +1,74 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+    Manage Events — Admin
+{% endblock %}
+
+{% block page_css %}
+    <link rel="stylesheet" href="{{ url_for('admin.static', filename='manage_events.css') }}">
+{% endblock %}
+
+{% block nav %}
+    {% include 'admin_components/page_nav.html' %}
+{% endblock %}
+
+{% block content %}
+    <h1 style="text-align:center;color:#a855f7;margin-bottom:2rem">Manage Events</h1>
+
+    <div class="notification" id="notification"></div>
+
+    <div class="section">
+        <h3>Create New Event</h3>
+        <input type="text" id="newTitle" placeholder="Event Title" style="margin-bottom:.8rem">
+        <textarea id="newDescription" placeholder="Event Description (optional)"></textarea>
+        <input type="date" id="newDate" style="margin-bottom:.8rem">
+        <input type="time" id="newTime" placeholder="Time (optional)" style="margin-bottom:.8rem">
+        <input type="text" id="newLocation" placeholder="Location/Venue" style="margin-bottom:.8rem">
+        <input type="text" id="newImageUrl" placeholder="Image URL (optional)" style="margin-bottom:.8rem">
+        <button class="save-btn create-event" >Create Event</button>
+    </div>
+
+    <div class="section">
+        <h3>Upcoming & Past Events</h3>
+        <div class="events-grid" id="eventsList">
+            {% for event in events %}
+            <div class="event-card" data-id="{{ event.id }}">
+                <div class="event-card-content">
+                    <div class="title">{{ event.title }}</div>
+                    <div class="date">📅 {{ event.date.strftime('%b %d, %Y') }}{% if event.time %} at {{ event.time.strftime('%H:%M') }}{% endif %}</div>
+                    {% if event.location %}<div class="location">📍 {{ event.location }}</div>{% endif %}
+                    {% if event.description %}<div style="color:#cbd5e1;margin-top:.5rem;font-size:0.9rem">{{ event.description }}</div>{% endif %}
+                </div>
+                <div class="event-card-actions">
+                    <button class="save-btn edit-event-model" data-event-title="{{ event.title}}" data-event-date="{{ event.date }}" data-event-id="{{ event.id }}" data-event-description="{{ event.description }}" data-event-image-url="{{ event.image_url }}" data-event-time="{{ event.time }}" data-event-location="{{ event.location }}" data-event-img="{{ event.image_url }}">Edit</button>
+                    <button class="delete-btn delete-event" data-event-id="{{ event.id}}">Delete</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if not events %}
+        <p style="color:#cbd5e1;text-align:center">No events yet. Create one above!</p>
+        {% endif %}
+    </div>
+
+
+    <!-- Edit Event Modal -->
+    <div class="modal" id="editModal">
+    <div class="modal-content">
+        <span class="modal-close" >&times;</span>
+        <h2>Edit Event</h2>
+        <input type="hidden" id="editId">
+        <input type="text" id="editTitle" placeholder="Event Title" style="margin-bottom:.8rem">
+        <textarea id="editDescription" placeholder="Event Description (optional)"></textarea>
+        <input type="date" id="editDate" style="margin-bottom:.8rem">
+        <input type="time" id="editTime" style="margin-bottom:.8rem">
+        <input type="text" id="editLocation" placeholder="Location/Venue" style="margin-bottom:.8rem">
+        <input type="text" id="editImageUrl" placeholder="Image URL (optional)" style="margin-bottom:.8rem">
+        <button class="save-btn save-event-edit" >Save Changes</button>
+    </div>
+    </div>
+{% endblock %}
+
+{% block page_js %}
+    <script src="{{url_for('admin.static', filename='manage_events.js') }}" type="module"></script>
+{% endblock %}

@@ -1,0 +1,308 @@
+/* =========================
+   CONTACT — ONYX CROWN THEME
+   Black & gold — matches home, about, media, blog archive, post themes.
+========================= */
+
+:root {
+  --gold:        #C9A84C;
+  --gold-bright: #F0C040;
+  --gold-soft:   rgba(201, 168, 76, 0.18);
+  --gold-glow:   rgba(201, 168, 76, 0.28);
+
+  --ink:      #0A0A0A;
+  --surface:  #111111;
+  --surface2: #1A1A1A;
+  --paper:    #141414;
+
+  --text:     #F0EDE6;
+  --muted:    rgba(240, 237, 230, 0.52);
+
+  --line:    rgba(201, 168, 76, 0.14);
+  --shadow:  rgba(0, 0, 0, 0.55);
+  --shadow2: rgba(0, 0, 0, 0.72);
+}
+
+/* =========================
+   HERO
+========================= */
+.contact-hero {
+  padding: 5rem 5% 2.2rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  background:
+    radial-gradient(circle at 50% 30%, rgba(201, 168, 76, 0.12), transparent 52%),
+    linear-gradient(180deg, rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.60));
+  border-bottom: 1px solid var(--line);
+  border-radius: 26px;
+  margin-top: -2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* gold crown-glow orb */
+.contact-hero::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 64%;
+  transform: translate(-50%, -50%);
+  width: min(520px, 86vw);
+  aspect-ratio: 1 / 1;
+  border-radius: 999px;
+  z-index: -1;
+
+  background:
+    radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.12), transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.07), transparent 68%);
+  filter: blur(1px);
+  opacity: 0.9;
+}
+
+.contact-hero h1 {
+  color: var(--text);
+  font-size: clamp(1.7rem, 3.6vw, 2.8rem);
+  margin-bottom: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-shadow: 0 0 32px rgba(201, 168, 76, 0.18);
+}
+
+.contact-hero h1::after {
+  content: "";
+  display: block;
+  width: 92px;
+  height: 2px;
+  margin: 1rem auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.9;
+}
+
+.contact-hero p {
+  color: var(--muted);
+  max-width: 900px;
+  margin: 0.75rem auto 0;
+  line-height: 1.8;
+  font-size: 1.02rem;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+.contact-main {
+  max-width: 1100px;
+  margin: 2rem auto 3.5rem;
+  padding: 0 5%;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 1.4rem;
+}
+
+/* =========================
+   FORM CARD
+========================= */
+.hire-form {
+  background: var(--surface2);
+  padding: 1.4rem;
+  border-radius: 22px;
+  border: 1px solid rgba(201, 168, 76, 0.16);
+  box-shadow:
+    0 18px 64px rgba(0, 0, 0, 0.50),
+    inset 0 1px 0 rgba(201, 168, 76, 0.08);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.hire-form::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(201, 168, 76, 0.09), transparent 55%),
+    radial-gradient(circle at 50% 18%, rgba(201, 168, 76, 0.06), transparent 58%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.form-row {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 0.9rem;
+}
+
+.form-row .field { flex: 1; }
+
+label {
+  display: block;
+  color: rgba(240, 237, 230, 0.72);
+  font-weight: 800;
+  margin-bottom: 0.45rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(201, 168, 76, 0.20);
+  background: rgba(10, 10, 10, 0.80);
+  color: var(--text);
+  outline: none;
+  transition: box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+/* select arrow tint on dark */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23C9A84C' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.2rem;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(240, 237, 230, 0.28);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(201, 168, 76, 0.50);
+  box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.10);
+  background: rgba(17, 17, 17, 0.90);
+}
+
+textarea {
+  min-height: 170px;
+  resize: vertical;
+}
+
+/* =========================
+   SIDEBAR CARD
+========================= */
+.sidebar {
+  background: var(--surface2);
+  padding: 1.2rem;
+  border-radius: 22px;
+  border: 1px solid rgba(201, 168, 76, 0.14);
+  color: var(--muted);
+  box-shadow: 0 18px 64px rgba(0, 0, 0, 0.50);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* gold sheen replaces the blue aura */
+.sidebar::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(circle at 20% 20%, rgba(201, 168, 76, 0.09), transparent 58%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* =========================
+   SUBMIT ROW
+========================= */
+.submit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+
+.note {
+  color: rgba(240, 237, 230, 0.42);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 0.9rem 2.2rem;
+  background: var(--gold);
+  color: #0A0A0A;
+  text-decoration: none;
+  font-weight: 900;
+  border-radius: 999px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 18px 56px rgba(201, 168, 76, 0.30);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.cta-button:hover {
+  background: var(--gold-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 28px 80px rgba(201, 168, 76, 0.40);
+}
+
+/* =========================
+   NAV MOBILE SUPPORT
+========================= */
+.h-menu {
+  display: none;
+  cursor: pointer;
+  font-size: 1.4rem;
+  color: var(--text);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 1024px) {
+  .contact-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-hero {
+    padding: 3.4rem 1.25rem 2rem;
+    border-radius: 22px;
+  }
+
+  .contact-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    padding: 0 1.25rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .submit-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cta-button {
+    width: 100%;
+    text-align: center;
+  }
+
+  textarea { min-height: 140px; }
+}
+
+@media (max-width: 360px) {
+  body { font-size: 14px; }
+}

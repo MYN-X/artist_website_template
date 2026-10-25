@@ -1,0 +1,101 @@
+    <style>
+    
+    /* Fixed positioning in top-right corner */
+    .notification-card {
+      position: fixed;
+      top: 20px;
+      right: -350px; /* Hidden off-screen by default */
+      width: 320px;
+      background-color: #ffffff;
+      color: #333333;
+      border-left: 5px solid #27ae60;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 1000;
+    }
+    
+    /* Slide in animation class */
+    .notification-card.show {
+      right: 20px;
+    }
+    
+    .notification-icon {
+      font-size: 24px;
+    }
+    
+    .notification-content h4.success {
+      margin: 0 0 4px 0;
+      font-size: 16px;
+      color: #27ae60;
+    }
+    
+    .notification-content h4.error {
+      margin: 0 0 4px 0;
+      font-size: 16px;
+      color: #e74c3c;
+    }
+    
+    .notification-card.error {
+      border-left-color: #e74c3c; /* Red error indicator border */
+    }
+    
+    .notification-card.success {
+      border-left-color: #27ae60; /* Green success indicator border */
+    }
+    
+    .notification-card.info {
+      border-left-color: #3498db; /* Blue info indicator border */
+    }
+    
+    .notification-content p {
+      margin: 0;
+      font-size: 14px;
+      color: #666666;
+    }
+    
+    /* Close Button (X) */
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: #999999;
+      cursor: pointer;
+      margin-left: auto;
+      padding: 0;
+    }
+    
+    .close-btn:hover {
+      color: #333333;
+    }
+    
+    /* Trigger Button Styling */
+    .trigger-btn {
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    
+    </style>
+
+
+<!-- Notification Container -->
+<div class="notification-card" id="notification-container">
+  <div class="notification-icon">Notification</div>
+  <div class="notification-content">
+    <h4 class="type"></h4>
+    <p class="notification" id="notification"></p>
+  </div>
+    <button class="close-btn" type="button">&times;</button>
+</div>
+

@@ -1,0 +1,219 @@
+import logging
+import os
+from pathlib import Path
+from typing import Optional
+
+import click
+from flask import Flask
+from flask_login import LoginManager
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.csrf import CSRFProtect
+
+# ------------------------------------------------------------
+# Logging
+# ------------------------------------------------------------
+logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
+logger = logging.getLogger(__name__)
+
+# ------------------------------------------------------------
+# Extensions
+# ------------------------------------------------------------
+db = SQLAlchemy()
+
+
+# ------------------------------------------------------------
+# Helpers
+# ------------------------------------------------------------
+def _normalize_database_url(url: Optional[str]) -> Optional[str]:
+    """
+    Some providers still provide postgres:// URLs.
+    SQLAlchemy expects postgresql://.
+    """
+    if not url:
+        return None
+    if url.startswith("postgres://"):
+        return url.replace("postgres://", "postgresql://", 1)
+    return url
+
+
+def _build_sqlite_uri(sqlite_path: Optional[str]) -> str:
+    """
+    Builds a SQLite SQLAlchemy URI safely for:
+      - relative paths (sqlite:///portfolio.db)
+      - absolute Linux paths (sqlite:////var/data/portfolio.db)
+
+    If SQLITE_PATH is not set, defaults to 'portfolio.db' in the working dir.
+    """
+    raw = (sqlite_path or "portfolio.db").strip()
+    p = Path(raw).expanduser()
+
+    # Absolute path
+    if p.is_absolute():
+        return f"sqlite:////{p.as_posix().lstrip('/')}"
+    # Relative path -> 3 slashes
+    return f"sqlite:///{p.as_posix()}"
+
+
+def _configure_database(app: Flask) -> None:
+    """
+    Configure SQLALCHEMY_DATABASE_URI.
+
+    Priority:
+      1) DATABASE_URL (Postgres / Supabase / Render Postgres)
+      2) SQLITE_PATH (SQLite file path, useful with persistent disk)
+      3) local sqlite file: portfolio.db
+    """
+    database_url = _normalize_database_url(os.getenv("DATABASE_URL"))
+    if database_url:
+        # in prod
+        app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+        # print("DB not present")
+        print("The database is:")
+        print(database_url)
+        return
+
+    logging.debug("Error - App running in prod with no db url")
+    return
+    
+ 
+def _init_auth(app: Flask) -> None:
+    login_manager = LoginManager()
+    login_manager.login_view = os.getenv("LOGIN_VIEW_ENDPOINT", "admin.admin_login")
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id: str):
+        from .models import User  # local import avoids circular deps
+        try:
+            return db.session.get(User, int(user_id))
+        except (TypeError, ValueError):
+            return None
+
+
+def _register_blueprints(app: Flask) -> None:
+    from .home.route import home
+    from .terms.route import terms
+    from .blog_post.route import blog
+    from .blog.route import all_blogs
+    from .contact.route import contct
+    from .privacy.route import privacy
+    # from .services.route import service
+    from .linktree.route import linktree
+    from .events.route import events
+    from .media.route import media
+    from .gallery.route import gallery
+    from .about.route import about
+    from .conditions.route import conditions
+    from .admin.route import admin
+    from .admin.route_home import admin_home
+    from .admin.route_blogs import admin_blogs
+    from .admin.route_messages import admin_messages
+    from .admin.route_about import admin_about
+    from .admin.route_media import admin_media
+    from .admin.route_gallery import admin_gallery
+    from .admin.route_events import admin_events
+
+    blueprints = [
+        # Public Routes
+        home,
+        blog,
+        terms,
+        contct,
+        privacy,
+        all_blogs,
+        linktree,
+        events,
+        media,
+        gallery,
+        about,
+        conditions,
+        # CMS Routes
+        admin,
+        admin_home,
+        admin_blogs,
+        admin_messages,
+        admin_about,
+        admin_media,
+        admin_gallery,
+        admin_events,
+    ]
+
+    for bp in blueprints:
+        app.register_blueprint(bp)
+
+
+
+
+
+# ------------------------------------------------------------
+# App Factory
+# ------------------------------------------------------------
+def create_app() -> Flask:
+    app = Flask(__name__)
+
+
+    if os.getenv("APP_ENV"):
+        app.secret_key = os.getenv("SECRET_KEY")
+        app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+        try:
+            _configure_database(app)
+        except Exception as e:
+            print(e)
+            return
+
+    else:
+        app.secret_key = "dev-secret-key-change-me"
+        app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///../portfolio.db"
+
+    from .upload_validation import MAX_IMAGE_SIZE
+    app.config["MAX_CONTENT_LENGTH"] = MAX_IMAGE_SIZE + 64 * 1024
+
+
+    csrf = CSRFProtect(app)
+
+    # Init extensions
+    db.init_app(app)
+    Migrate(app, db)
+
+    from .seed import create_admin, seed_all
+    with app.app_context():
+        seed_all(db)
+
+    @app.cli.command("create-admin")
+    def create_admin_command():
+        """Create the first admin account interactively."""
+        email = click.prompt("Admin email")
+        password = click.prompt(
+            "Admin password", hide_input=False, confirmation_prompt=True
+        )
+        try:
+            create_admin(db, email, password)
+        except ValueError as exc:
+            raise click.ClickException(str(exc)) from exc
+        click.echo("Admin account created.")
+
+    # Auth
+    _init_auth(app)
+
+    @app.get("/healthz")
+    def healthz():
+        return {"status": "ok"}, 200
+
+    @app.errorhandler(413)
+    def request_too_large(_error):
+        return {"message": "Request exceeds the 8 MiB image upload limit."}, 413
+
+    # Blueprints
+    _register_blueprints(app)
+
+    return app
+
+
+# ------------------------------------------------------------
+# Gunicorn entrypoints:
+# 1) If you set: app = create_app() below -> gunicorn app:app
+# 2) Or without it -> gunicorn "app:create_app()"
+# ------------------------------------------------------------
+# app = create_app()

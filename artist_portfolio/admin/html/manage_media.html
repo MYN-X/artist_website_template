@@ -1,0 +1,202 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+    Manage Media — Admin
+{% endblock %} 
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('admin.static', filename='manage_media.css') }}">
+{% endblock %}
+
+{% block nav %}
+    {% include "admin_components/page_nav.html" %}
+{% endblock %}
+
+{% block content %}
+    <h1>Manage Media</h1>
+
+    <div class="section">
+        <h3>Streaming Links and Social Links</h3>
+        <p>Update the link for each streaming service.</p>
+
+        <label>Spotify</label>
+        <input id="spotify" type="text" placeholder="https://open.spotify.com/..." value="{{ streaming.get('spotify','') }}">
+
+        <label>SoundCloud</label>
+        <input id="soundcloud" type="text" placeholder="https://soundcloud.com/..." value="{{ streaming.get('soundcloud','') }}">
+
+        <label>YouTube Music</label>
+        <input id="youtubemusic" type="text" placeholder="https://music.youtube.com/..." value="{{ streaming.get('youtubemusic','') }}">
+
+        <label>Apple Music</label>
+        <input id="applemusic" type="text" placeholder="https://www.apple.com/apple-music/..." value="{{ streaming.get('applemusic','') }}">
+
+        <label>AudioMack</label>
+        <input id="audiomack" type="text" placeholder="https://www.audiomack.com/..." value="{{ streaming.get('audiomack','') }}">
+
+        <label>Bandcamp</label>
+        <input id="bandcamp" type="text" placeholder="https://bandcamp.com/..." value="{{ streaming.get('bandcamp','') }}">
+
+        <label>Amazon Music</label>
+        <input id="amazon" type="text" placeholder="https://music.amazon.com/..." value="{{ streaming.get('amazon','') }}">
+
+        <label>ITunes</label>
+        <input id="itunes" type="text" placeholder="https://itunes.com/..." value="{{ streaming.get('itunes','') }}">
+
+        <label>Google Play music</label>
+        <input id="gpm" type="text" placeholder="https://google.music.play.com/..." value="{{ streaming.get('gpm','') }}">
+
+        <label>Instagram</label>
+        <input id="instagram" type="text" placeholder="https://instagram.com/..." value="{{ streaming.get('instagram','') }}">
+
+        <label>Tiktok</label>
+        <input id="tiktok" type="text" placeholder="https://tiktok.com/..." value="{{ streaming.get('tiktok','') }}">
+
+        <label>facebook</label>
+        <input id="facebook" type="text" placeholder="https://facebook.com/..." value="{{ streaming.get('facebook','') }}">
+
+        <label>Youtube</label>
+        <input id="youtube" type="text" placeholder="https://youtube.com/..." value="{{ streaming.get('youtube','') }}">
+
+        <label>Thread</label>
+        <input id="thread" type="text" placeholder="https://thread.com/..." value="{{ streaming.get('thread','') }}">
+
+        <label>Twitter/X</label>
+        <input id="x" type="text" placeholder="https://x.com/..." value="{{ streaming.get('x','') }}">
+
+
+        <div style="margin-top:.6rem"><button class="save-btn save-links-btn" data-media-action="save-streaming">Save Streaming Links</button></div>
+
+    </div>
+
+    <div class='section'>
+        <h3>Current Handle</h3>
+        {% if handle %}
+            <p>Current handle: <strong id="handleDisplay">{{ handle }}</strong></p>
+        {% else %}
+            <p>No handle set yet.</p>
+        {% endif %}
+        <h3>Add handle</h3>
+        <p>Enter the handle for each platform (without @). This is used to display the handle next to the icon on the media page.</p>
+        <input type="text" placeholder="Handle (without @)" id="handle" value="{{ handle }}">
+
+        <div style="margin-top:.6rem"><button class="save-handle-btn save-btn" data-media-action="save-handle">Save Handle</button></div>
+    </div>
+
+    <div class="section">
+        <h3>Featured Playlist</h3>
+        <p>Paste the embed URL for the featured playlist (iframe src URL).</p>
+        <input id="playlist" type="text" placeholder="https://open.spotify.com/embed/..." value="{{ featured_playlist }}">
+        <div style="margin-top:.6rem"><button class="save-playlist-btn save-btn" data-media-action="save-playlist">Save Playlist</button></div>
+    </div>
+
+
+
+    <div class="section">
+        <h3>EPs</h3>
+        <p>Manage EP entries shown on the media page. Edit then click "Save EPs".</p>
+        <div class="eps-list" id="epsList" data-delete-url-prefix="{{ url_for('admin_media.delete_eps', idx=0).rsplit('/', 1)[0] }}/">
+            {% for e in eps %}
+            <div class="eps-item" data-ep-index="{{ loop.index0 }}">
+                <input class="title" type="text" placeholder="Title" value="{{ e.title }}">
+                <input class="year small" type="text" placeholder="Year" value="{{ e.year }}">
+                <input class="stream small" type="text" placeholder="Stream URL" value="{{ e.stream_url }}">
+                <input class="buy small" type="text" placeholder="Buy URL" value="{{ e.buy_url }}">
+                <button class="remove-eps-btn save-btn" data-media-action="remove-eps">Remove</button>
+            </div>
+            {% endfor %}
+        </div>
+        <div style="margin-top:.6rem">
+            <button class="add-eps-btn save-btn" data-media-action="add-eps">Add EP Row</button>
+            <button class="save-eps-btn save-btn" data-media-action="save-eps">Save EPs</button>
+        </div>
+    </div>
+
+
+    <div class="section">
+        <h3>Singles</h3>
+        <p>Manage single entries shown on the media page. Edit then click "Save Singles".</p>
+        <div class="s-list" id="sList">
+            {% for single in singles %}
+            <div class="s-item">
+                <input class="title" type="text" placeholder="Title" value="{{ single.title }}">
+                <input class="artist" type="text" placeholder="Artist" value="{{ single.artist_name }}">
+                <input class="album" type="text" placeholder="album" value="{{ single.album }}">
+                <input class="link"  type="text" placeholder="Streaming URL" value="{{ single.links }}">
+                {%if single.buy_link %}
+                    <input class="buy_link"  type="text" placeholder="Buy URL" value="{{ single.buy_link }}">
+                {% else %}
+                    <input class="buy_link"  type="text" placeholder="Buy URL" value="">
+                {% endif %}
+                
+                {% if single.id %}
+                    <button class="remove-single-btn save-btn" data-media-action="remove-single">Remove</button>
+                {% endif %}
+                <button class="save-single-btn save-btn" data-media-action="save-single">Save Single</button>
+            </div>
+            {% endfor %}
+        </div>
+        <div style="margin-top:.6rem">
+            <button class="add-single-btn save-btn" data-media-action="add-single">Add Single Row</button>
+        </div>
+    </div>
+
+
+    <div class="section">
+    <h3>Albums</h3>
+    <p>Manage album entries shown on the media page.</p>
+
+    <div class="album-list" id="albumList">
+    {% for album in albums %}
+    <div class="album-item">
+        <input class="title" type="text" placeholder="Title" value="{{ album.title }}">
+        <input class="artist" type="text" placeholder="Artist" value="{{ album.artist_name }}">
+        <input class="released_date small" type="date"
+            value="{{ album.released_date }}">
+        <input class="link" type="text" placeholder="Album URL" value="{{ album.link }}">
+        {% if album.buy_link %}
+            <input class="buy-link" type="text" placeholder="Buy URL (optional)" value="{{ album.buy_link }}">
+        {% else %}
+            <input class="buy-link" type="text" placeholder="Buy URL (optional)" value="">
+        {% endif %}
+
+        <button class="save-btn remove-album-btn" data-media-action="remove-album">Remove</button>
+        <button class="save-btn save-album-btn" data-media-action="save-album">Save Album</button>
+    </div>
+    {% endfor %}
+    </div>
+    <div style="margin-top:.6rem">
+    <button class="save-btn add-album-btn" data-media-action="add-album">Add Album Row</button>
+    </div>
+    </div>
+
+
+    <div class="section">
+        <h3>Latest Single or Song</h3>
+        <p>Manage latest shown on the media page. Edit then click "Save".</p>
+        <div class="eps-list" id="latestList">
+            {% for single in latest %}
+                {% if single %}
+                    <div class="eps-item latest-url" >
+                        <span><a href="{{single}}">{{single}}</a></span>
+                    </div>
+                {% else %}
+                    <span>No latest single URLs</span>
+                {% endif %}
+            {% endfor %}
+
+            <div class="latest-item" >
+                <input class="stream small" type="text" placeholder="Stream URL" id="s-url">
+                <input class="video small" type="text" placeholder="Video URL" id="v-url">
+            </div>
+        </div>
+        <div style="margin-top:.6rem">
+            <button class="save-btn save-latest-btn" data-media-action="save-latest">Save</button>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block page_js %}
+    <script src="{{url_for('admin.static', filename='manage_media.js') }}" type="module"></script>
+{% endblock %}
