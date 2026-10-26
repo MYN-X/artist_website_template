@@ -6,9 +6,11 @@ from typing import Optional
 import click
 from flask import Flask
 from flask_login import LoginManager
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
-from flask_wtf.csrf import CSRFProtect
+# from flask_migrate import Migrate
+# from flask_sqlalchemy import SQLAlchemy
+# from flask_wtf.csrf import CSRFProtect
+
+from .extensions import db, migrate, csrf
 
 # ------------------------------------------------------------
 # Logging
@@ -19,7 +21,7 @@ logger = logging.getLogger(__name__)
 # ------------------------------------------------------------
 # Extensions
 # ------------------------------------------------------------
-db = SQLAlchemy()
+# db = SQLAlchemy()
 
 
 # ------------------------------------------------------------
@@ -171,11 +173,12 @@ def create_app() -> Flask:
     app.config["MAX_CONTENT_LENGTH"] = MAX_IMAGE_SIZE + 64 * 1024
 
 
-    csrf = CSRFProtect(app)
+    csrf.init_app(app)
 
     # Init extensions
     db.init_app(app)
-    Migrate(app, db)
+    # Migrate(app, db)
+    migrate.init_app(app, db)
 
     from .seed import create_admin, seed_all
     with app.app_context():

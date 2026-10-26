@@ -24,6 +24,7 @@ def seed_all(db):
 
 
 def create_admin(db, email: str, password: str):
+    # from .models import Admin
     from .models import Admin
 
     email = email.strip()

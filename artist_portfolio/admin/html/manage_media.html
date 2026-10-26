@@ -170,6 +170,55 @@
     </div>
     </div>
 
+    <div class="album-list" id="albumList">
+        {% if all_albums %}
+            {% for album in all_albums %}
+            <div class="album-item" data-album-id="{{ album.id }}">
+                <input class="title" type="text" placeholder="Title" value="{{ album.album_name }}">
+                <input class="artist" type="text" placeholder="Artist" value="{{ album.artist_name }}">
+                <input class="title" type="date" placeholder="released date" value="{{ album.release_date }}">
+                <textarea name="description" id="description" placeholder="description" value="{{ album.description}}"></textarea>
+                <input class="title" type="file" placeholder="Cover Image">
+
+                <h3>Tracklist</h3>
+                <ol>
+                {% for track in album.tracklist %}
+                    <li>
+                    {{ track.track_name }}
+                    {% if track.duration %}
+                        ({{ track.duration }})
+                    {% endif %}
+                    </li>
+                {% else %}
+                    <li>No tracks available.</li>
+                {% endfor %}
+                </ol>
+
+                <h3>Listen</h3>
+                <ul>
+                {% for link in album.streaming_links %}
+                    <li>
+                    <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
+                        {{ link.platform }}
+                    </a>
+                    </li>
+                {% else %}
+                    <li>No streaming links available.</li>
+                {% endfor %}
+                </ul>
+            </div>
+
+            <button class="save-btn remove-album-btn" >Remove</button>
+            <button class="save-btn save-album-btn" > update Album</button>
+            {% endfor %}
+        {% else %}
+            <p>No albums found.</p>
+        {% endif %}
+
+    </div>
+
+
+
 
     <div class="section">
         <h3>Latest Single or Song</h3>

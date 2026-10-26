@@ -14,7 +14,7 @@
   {% endif %}
 
   <nav>
-    <div class="logo">{{name}}</div>
+    <div class="logo">{{name}}</div> 
      <ul class="nav-links" id="navLinks">
         <li><a href="{{ url_for('home.index') }}">Home</a></li>
       </ul>
@@ -28,7 +28,7 @@
     {% endif %}
 
     <div class="lt-name">{{ name }}</div>
-    <div class="lt-handle">@{{ config.handle }}</div>
+    <div class="lt-handle">{{ config.handle }}</div>
     <div class="lt-bio">{{ config.bio }}</div>
 
     <div class="lt-links">

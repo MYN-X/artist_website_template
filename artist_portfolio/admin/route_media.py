@@ -2,11 +2,22 @@ from datetime import datetime
 import json
 import os
 from pathlib import Path
-from ..models import Admin, User, Skills, Blog, ProfileImg, Service, FAQ, Message, Gallery, AboutSection, MediaConfig, Event, LinktreeLink, LinktreeConfig, Singles, Albums, Expertise, HeroAbout, Testimonials, FoundationAbout, Journey, Client
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, current_user
 import logging
+
+from ..models import (
+    Admin, User, Skills, 
+    Blog, ProfileImg, Service, 
+    FAQ, Message, Gallery, 
+    AboutSection, MediaConfig, 
+    Event, LinktreeLink, 
+    LinktreeConfig, Singles, 
+    Albums, Expertise, HeroAbout, 
+    Testimonials, FoundationAbout, 
+    Journey, Client, Album, AlbumTrack, AlbumStreamingLink
+    )
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -94,6 +105,21 @@ def manage_media():
     except Exception:
         media = {}
 
+        # TODO: update which album model is used
+
+    # album = db.session.get(Album, 1)
+    # all_albums = Album.query.all()
+    all_albums = Album.query.all()
+
+    # if album:
+    #     print(album.album_name)
+
+    # for track in album.tracklist:
+    #     print(track.track_number, track.track_name, track.duration)
+
+    # for link in album.streaming_links:
+    #     print(link.platform, link.url)
+
     singles = Singles.query.all()
     albums = Albums.query.all()
 
@@ -101,7 +127,12 @@ def manage_media():
     featured_playlist = media.get('featured_playlist', '')
     eps = media.get('eps', [])
     latest = media.get('latest', [])
-    return render_template('manage_media.html', streaming=streaming, featured_playlist=featured_playlist, eps=eps, latest=latest, singles=singles, albums=albums, handle=handle)
+    return render_template('manage_media.html', streaming=streaming, 
+                           featured_playlist=featured_playlist, eps=eps, 
+                           latest=latest, singles=singles, 
+                           albums=albums, handle=handle,
+                           all_albums=all_albums,
+                           )
 
 
 @admin_media.route('/update/streaming/links', methods=['POST'])

@@ -15,7 +15,7 @@ media = Blueprint(
 def media_route():
 
     ga_id = Client.query.filter_by(name='oom_dass').first()
-    ga_id = ga_id.value if ga_id else None
+    ga_id = ga_id.ga4_measurement_id if ga_id else None
     media_data = {}
     try:
         entries = MediaConfig.query.all()
